@@ -1,11 +1,15 @@
-// Uncomment this line to use CSS modules
-// import styles from './app.module.css';
-import NxWelcome from './nx-welcome';
+import { PersonPage } from '../pages/PersonPage';
+import { SomeWizzard } from '../SomeWizzard';
 
 export function App() {
   return (
-    <div>
-      <NxWelcome title="react-wizzard-provider" />
+    <div
+      style={{
+        height: '100vh',
+        width: '100vw',
+      }}
+    >
+      <SomeWizzard />
     </div>
   );
 }
