@@ -1,7 +1,16 @@
 import { Row, Col } from 'antd';
 import { WizzardProvider } from '../Wizzard';
-import { StepFive, StepFour, StepOne, StepThree, StepTwo } from './Steps';
+import {
+  StepFive,
+  StepFour,
+  StepOne,
+  StepSeven,
+  StepSix,
+  StepThree,
+  StepTwo,
+} from './Steps';
 import { WizzFooter } from './WizzFooter';
+import React from 'react';
 
 export const SomeWizzard = () => {
   return (
@@ -51,6 +60,20 @@ export const SomeWizzard = () => {
             },
             visible: false,
           },
+          {
+            step: 'six',
+            element() {
+              return <StepSix />;
+            },
+            visible: false,
+          },
+          {
+            step: 'seven',
+            element() {
+              return <StepSeven />;
+            },
+            visible: false,
+          },
         ],
       }}
     >
@@ -75,9 +98,9 @@ export const SomeWizzard = () => {
                   height: '100%',
                 }}
               >
-                {Object.values(steps).map((step) => {
+                {Object.values(steps).map((step, index) => {
                   return (
-                    <>
+                    <React.Fragment key={index}>
                       {step.visible ? (
                         <div
                           style={{
@@ -91,7 +114,7 @@ export const SomeWizzard = () => {
                           {step.step}
                         </div>
                       ) : null}
-                    </>
+                    </React.Fragment>
                   );
                 })}
               </Col>

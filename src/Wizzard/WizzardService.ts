@@ -1,4 +1,4 @@
-import { FactoryStep } from './FactoryStep';
+import { Step } from './Step';
 import { IWizzardConfig, stepMapType, stepUpdateType } from './types';
 
 export class WizzardService {
@@ -11,13 +11,15 @@ export class WizzardService {
     const { steps, wizzData } = config;
 
     steps.forEach((item, index) => {
-      let { step } = new FactoryStep(item, index, steps);
-      step.nextStep = () => {
-        this.changeStep(steps[index + 1].step);
-      };
-      this.stepsMap[item.step] = step;
+      this.stepsMap[item.step] = new Step(
+        item,
+        index,
+        steps,
+        this.changeStep.bind(this)
+      );
     });
     this.wizzData = wizzData;
+    console.log('THIS', this);
   }
 
   getActiveStep(activeStep: string) {
@@ -30,12 +32,14 @@ export class WizzardService {
 
   changeStep(step: string) {
     this.stepUpdate(step);
+    console.log('STEPS MAP', this.stepsMap);
   }
 
   updateVisibility(steps: string[]) {
     steps.forEach((item) => {
       this.stepsMap[item].visible = !this.stepsMap[item].visible;
     });
+    console.log('STEPS MAP', this.stepsMap);
   }
 
   getDataBySteps() {

@@ -6,7 +6,7 @@ const StepTwo = () => {
   const [form] = useForm();
   const wizzardClient = useWizzardClient();
   const step = useStepClient();
-  console.log('step', step);
+  // console.log('step', step);
   return (
     <Form
       initialValues={step.getData()}
