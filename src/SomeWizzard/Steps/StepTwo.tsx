@@ -1,12 +1,11 @@
-import { Form, Button, Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { useStepClient, useWizzardClient } from '../../Wizzard';
+import { useStepClient } from '../../Wizzard';
 
 const StepTwo = () => {
   const [form] = useForm();
-  const wizzardClient = useWizzardClient();
   const step = useStepClient();
-  // console.log('step', step);
+
   return (
     <Form
       initialValues={step.getData()}
