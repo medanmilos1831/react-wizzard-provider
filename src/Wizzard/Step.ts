@@ -3,39 +3,38 @@ import { IStepConfig } from './types';
 export class Step {
   step;
   element;
-  visible;
   data;
   next;
   isLast;
   nextStep;
   updateStepData;
   getData;
+  isActive;
 
   constructor(
     step: IStepConfig,
     index: number,
     steps: IStepConfig[],
-    callback: (step: string) => void
+    callback: (step: string) => void,
+    activeStep: string,
+    onFinish: () => void
   ) {
     this.step = step.step;
     this.element = step.element;
-    this.visible = step.visible;
     this.data = step.data;
+    this.isActive = activeStep === step.step;
     if (steps.length - 1 === index) {
       this.isLast = true;
       this.next = undefined;
+      this.nextStep = () => {
+        onFinish();
+      };
     } else {
-      if (this.visible) {
-        this.isLast = false;
-        this.next = steps[index + 1].step;
-        this.nextStep = () => {
-          callback(steps[index + 1].step);
-        };
-      } else {
-        this.isLast = undefined;
-        this.next = undefined;
-        this.nextStep = undefined;
-      }
+      this.isLast = false;
+      this.next = steps[index + 1].step;
+      this.nextStep = () => {
+        callback(steps[index + 1].step);
+      };
     }
     this.updateStepData = (callback: (stepData: any) => void) => {
       this.data = callback(this.data);

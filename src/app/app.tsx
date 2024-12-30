@@ -1,4 +1,3 @@
-import { PersonPage } from '../pages/PersonPage';
 import { SomeWizzard } from '../SomeWizzard';
 
 export function App() {

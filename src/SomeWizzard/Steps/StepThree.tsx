@@ -21,7 +21,6 @@ const StepThree = () => {
             };
           }
         });
-        wizzardClient.updateVisibility(['four', 'six']);
         step.nextStep();
       }}
     >

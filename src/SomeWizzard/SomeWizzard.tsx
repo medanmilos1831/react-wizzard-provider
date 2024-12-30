@@ -1,21 +1,17 @@
-import { Row, Col } from 'antd';
+import { Col, Row } from 'antd';
 import { WizzardProvider } from '../Wizzard';
-import {
-  StepFive,
-  StepFour,
-  StepOne,
-  StepSeven,
-  StepSix,
-  StepThree,
-  StepTwo,
-} from './Steps';
-import { WizzFooter } from './WizzFooter';
-import React from 'react';
+import { StepOne, StepThree, StepTwo } from './Steps';
 
 export const SomeWizzard = () => {
   return (
     <WizzardProvider
       config={{
+        onFinish(values: any) {
+          console.log('values', values);
+        },
+        onStepChange(values: any) {
+          console.log('onStepChange', values);
+        },
         active: 'one',
         wizzData: {
           isEditMode: true,
@@ -27,7 +23,6 @@ export const SomeWizzard = () => {
             element() {
               return <StepOne />;
             },
-            visible: true,
             data: {
               fname: 'milos',
             },
@@ -37,47 +32,17 @@ export const SomeWizzard = () => {
             element() {
               return <StepTwo />;
             },
-            visible: true,
           },
           {
             step: 'three',
             element() {
               return <StepThree />;
             },
-            visible: true,
-          },
-          {
-            step: 'four',
-            element() {
-              return <StepFour />;
-            },
-            visible: false,
-          },
-          {
-            step: 'five',
-            element() {
-              return <StepFive />;
-            },
-            visible: false,
-          },
-          {
-            step: 'six',
-            element() {
-              return <StepSix />;
-            },
-            visible: false,
-          },
-          {
-            step: 'seven',
-            element() {
-              return <StepSeven />;
-            },
-            visible: false,
           },
         ],
       }}
     >
-      {({ ActiveStep, steps, activeStep, changeStep }) => {
+      {({ ActiveStep, steps, changeStep }) => {
         return (
           <div
             style={{
@@ -100,21 +65,17 @@ export const SomeWizzard = () => {
               >
                 {Object.values(steps).map((step, index) => {
                   return (
-                    <React.Fragment key={index}>
-                      {step.visible ? (
-                        <div
-                          style={{
-                            background:
-                              activeStep === step.step ? 'blue' : 'gray',
-                          }}
-                          onClick={() => {
-                            changeStep(step.step);
-                          }}
-                        >
-                          {step.step}
-                        </div>
-                      ) : null}
-                    </React.Fragment>
+                    <div
+                      key={index}
+                      style={{
+                        background: step.isActive ? 'blue' : 'gray',
+                      }}
+                      onClick={() => {
+                        changeStep(step.step);
+                      }}
+                    >
+                      {step.step}
+                    </div>
                   );
                 })}
               </Col>
@@ -135,7 +96,6 @@ export const SomeWizzard = () => {
                 >
                   <ActiveStep />
                 </div>
-                {steps['four'].visible ? <WizzFooter /> : null}
               </Col>
             </Row>
           </div>

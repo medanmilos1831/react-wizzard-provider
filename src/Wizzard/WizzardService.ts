@@ -5,8 +5,12 @@ export class WizzardService {
   private stepUpdate: stepUpdateType;
   private stepsMap: stepMapType = {};
   private wizzData: any = undefined;
+  private onStepChange: (values: any) => void;
+  private onFinish: (values: any) => void;
 
   constructor(stepUpdate: stepUpdateType, config: IWizzardConfig) {
+    this.onFinish = config.onFinish;
+    this.onStepChange = config.onStepChange;
     this.stepUpdate = stepUpdate;
     const { steps, wizzData } = config;
 
@@ -15,11 +19,23 @@ export class WizzardService {
         item,
         index,
         steps,
-        this.changeStep.bind(this)
+        (step) => {
+          this.changeStep(step);
+        },
+        config.active,
+        () => {
+          this.onFinish(this.getDataByStep());
+        }
       );
     });
     this.wizzData = wizzData;
-    console.log('THIS', this);
+  }
+
+  private getDataByStep() {
+    return Object.keys(this.stepsMap).reduce((acc: any, key) => {
+      acc[key] = this.stepsMap[key].data;
+      return acc;
+    }, {});
   }
 
   getActiveStep(activeStep: string) {
@@ -30,16 +46,21 @@ export class WizzardService {
     return this.stepsMap;
   }
 
-  changeStep(step: string) {
-    this.stepUpdate(step);
-    console.log('STEPS MAP', this.stepsMap);
+  private _onStepChange(oldValue: string, newValue: string) {
+    this.stepsMap[oldValue].isActive = false;
+    this.stepsMap[newValue].isActive = true;
+    this.onStepChange({
+      oldValue,
+      newValue,
+      steps: this.stepsMap,
+    });
   }
 
-  updateVisibility(steps: string[]) {
-    steps.forEach((item) => {
-      this.stepsMap[item].visible = !this.stepsMap[item].visible;
+  changeStep(step: string) {
+    this.stepUpdate((prev: string) => {
+      this._onStepChange(prev, step);
+      return step;
     });
-    console.log('STEPS MAP', this.stepsMap);
   }
 
   getDataBySteps() {
